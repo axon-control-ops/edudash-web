@@ -2,8 +2,7 @@ import type { NextConfig } from "next";
 import path from "path";
 import { fileURLToPath } from "url";
 
-const configDir = path.dirname(fileURLToPath(import.meta.url));
-const repoRoot = path.resolve(configDir, '..');
+const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 const envAllowedDevOrigins =
   process.env.NEXT_PUBLIC_ALLOWED_DEV_ORIGINS ||
   process.env.ALLOWED_DEV_ORIGINS ||
@@ -28,14 +27,16 @@ const nextConfig: NextConfig = {
   // Turbopack configuration (Next.js 16+ default bundler)
   // Using empty config to acknowledge Turbopack while webpack config exists for fallback
   turbopack: {
-    root: repoRoot,
+    root: projectRoot,
     resolveAlias: {
       // Add any module aliases here if needed
     },
   },
 
-  // Keep tracing root aligned with turbopack.root to avoid Next.js warning.
-  outputFileTracingRoot: repoRoot,
+  // This repo is standalone, so tracing should stay anchored at the project root.
+  // Pointing above the repo causes Vercel to look for duplicated path segments
+  // like /vercel/path0/path0/.next/routes-manifest.json during deployment.
+  outputFileTracingRoot: projectRoot,
   
   // Webpack configuration (fallback for non-Turbopack builds)
   webpack: (config) => {
