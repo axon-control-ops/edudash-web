@@ -3,6 +3,7 @@
  * Mobile-first, polished apply flow for teachers without the app.
  * Uses inline styles for reliable production rendering (matches aftercare page pattern).
  */
+/* eslint-disable @next/next/no-img-element -- remote school logos are tenant content and this page intentionally renders raw img tags. */
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
@@ -341,8 +342,8 @@ export default function ApplyPage() {
   };
 
   const teacherSignupLink = inviteCode
-    ? `/sign-up/teacher?invite=${encodeURIComponent(inviteCode)}${jobId ? `&job=${encodeURIComponent(String(jobId))}` : ''}`
-    : `/sign-up/teacher${jobId ? `?job=${encodeURIComponent(String(jobId))}` : ''}`;
+    ? `https://app.edudashpro.org.za/sign-up/teacher?invite=${encodeURIComponent(inviteCode)}${jobId ? `&job=${encodeURIComponent(String(jobId))}` : ''}`
+    : `https://app.edudashpro.org.za/sign-up/teacher${jobId ? `?job=${encodeURIComponent(String(jobId))}` : ''}`;
 
   const logoUrl = jobPosting?.logo_url || schoolInfo?.logoUrl;
   const schoolName = schoolInfo?.name;

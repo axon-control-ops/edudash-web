@@ -38,7 +38,7 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: repoRoot,
   
   // Webpack configuration (fallback for non-Turbopack builds)
-  webpack: (config, { isServer }) => {
+  webpack: (config) => {
     // Reduce file watching overhead
     config.watchOptions = {
       ...config.watchOptions,

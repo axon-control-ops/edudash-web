@@ -1,6 +1,6 @@
 declare module 'next-pwa' {
   import type { NextConfig } from 'next';
-  type RuntimeCaching = any;
+  type RuntimeCaching = Record<string, unknown>;
   interface PWAOptions {
     dest?: string;
     disable?: boolean;

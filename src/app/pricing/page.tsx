@@ -1,16 +1,23 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "@/components/ui/Toast";
 import { ArrowLeft, Loader2 } from "lucide-react";
 
 type UserType = "parents" | "schools";
+type PricingPlan = {
+  name: string;
+  price: number | null;
+  priceAnnual: number | null;
+  popular: boolean;
+  features: string[];
+  originalPrice?: number;
+};
 
 export default function PricingPage() {
-  const router = useRouter();
   const supabase = createClient();
   const [userType, setUserType] = useState<UserType>("parents");
   const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annual">("monthly");
@@ -72,11 +79,14 @@ export default function PricingPage() {
 
   const trialDays = 7;
   const trialLabel = `${trialDays}-day free trial`;
-  const signUpRoute = userType === "parents" ? "https://app.edudashpro.org.za/sign-up/parent" : "https://app.edudashpro.org.za/sign-up/principal";
+  const appBaseUrl = "https://app.edudashpro.org.za";
+  const appDashboardUrl = `${appBaseUrl}/dashboard`;
+  const appSignInUrl = `${appBaseUrl}/sign-in?redirect=/pricing`;
+  const signUpRoute = userType === "parents" ? `${appBaseUrl}/sign-up/parent` : `${appBaseUrl}/sign-up/principal`;
 
   const handleSubscribe = async (planName: string, price: number) => {
     if (!isLoggedIn) {
-      router.push(`${signUpRoute}?redirect=/pricing&plan=${encodeURIComponent(planName)}`);
+      window.location.href = `${signUpRoute}?redirect=/pricing&plan=${encodeURIComponent(planName)}`;
       return;
     }
 
@@ -86,7 +96,7 @@ export default function PricingPage() {
     }
 
     if (price === 0) {
-      window.location.href = 'https://app.edudashpro.org.za/dashboard';
+      window.location.href = appDashboardUrl;
       return;
     }
 
@@ -117,7 +127,7 @@ export default function PricingPage() {
 
         if (refreshError || !refreshedSession) {
           toast.warning('Your session has expired. Please sign in again.');
-          window.location.href = 'https://app.edudashpro.org.za/sign-in?redirect=/pricing';
+          window.location.href = appSignInUrl;
           setProcessingPayment(null);
           return;
         }
@@ -128,7 +138,7 @@ export default function PricingPage() {
 
       if (!finalSession?.access_token) {
         toast.warning('Please log in to continue');
-        window.location.href = 'https://app.edudashpro.org.za/sign-in?redirect=/pricing';
+        window.location.href = appSignInUrl;
         setProcessingPayment(null);
         return;
       }
@@ -166,7 +176,7 @@ export default function PricingPage() {
     }
   };
 
-  const parentPlans = [
+  const parentPlans: PricingPlan[] = [
     {
       name: "Free",
       price: 0,
@@ -214,7 +224,7 @@ export default function PricingPage() {
     }
   ];
 
-  const schoolPlans = [
+  const schoolPlans: PricingPlan[] = [
     {
       name: "Free Plan",
       price: 0,
@@ -383,12 +393,18 @@ export default function PricingPage() {
         <header style={{ position: "sticky", top: 0, zIndex: 1000, background: "rgba(10, 10, 15, 0.95)", backdropFilter: "blur(12px)", borderBottom: "1px solid rgba(255, 255, 255, 0.1)" }}>
           <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "12px 20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: "10px", fontSize: "18px", fontWeight: 700, textDecoration: "none", color: "#fff" }}>
-              <img src="/icon-192.png" alt="EduDash Pro logo" style={{ width: "28px", height: "28px", borderRadius: "8px" }} />
+              <Image
+                src="/icon-192.png"
+                alt="EduDash Pro logo"
+                width={28}
+                height={28}
+                style={{ borderRadius: "8px" }}
+              />
               EduDash Pro
             </Link>
             {isLoggedIn ? (
               <button
-                onClick={() => window.location.href = 'https://app.edudashpro.org.za/dashboard'}
+                onClick={() => window.location.href = appDashboardUrl}
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -541,8 +557,8 @@ export default function PricingPage() {
             {activePlans.map((plan, index) => {
               const price = billingPeriod === "annual" ? plan.priceAnnual : plan.price;
               const isEnterprise = plan.price === null;
-              const hasPromo = userType === "parents" && (plan as any).originalPrice;
-              const originalPrice = (plan as any).originalPrice;
+              const hasPromo = userType === "parents" && typeof plan.originalPrice === "number";
+              const originalPrice = plan.originalPrice;
               
               return (
                 <div
@@ -628,7 +644,7 @@ export default function PricingPage() {
 
                   {isEnterprise ? (
                     <Link 
-                      href="/contact"
+                      href="/apply"
                       style={{
                         display: "block",
                         width: "100%",
@@ -648,7 +664,7 @@ export default function PricingPage() {
                     </Link>
                   ) : price === 0 ? (
                     <Link 
-                      href={isLoggedIn ? "/dashboard/parent" : `${signUpRoute}?redirect=/pricing&trial=1`}
+                      href={isLoggedIn ? appDashboardUrl : `${signUpRoute}?redirect=/pricing&trial=1`}
                       style={{
                         display: "block",
                         width: "100%",

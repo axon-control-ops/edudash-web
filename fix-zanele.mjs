@@ -122,7 +122,7 @@ async function main() {
   if (!authUser.user) {
     console.log('   Creating new auth user...');
     
-    const { data: newUser, error: createError } = await edudashClient.auth.admin.createUser({
+    const { error: createError } = await edudashClient.auth.admin.createUser({
       id: userId, // Use SAME user ID
       email: EMAIL,
       password: 'TempPassword123!',

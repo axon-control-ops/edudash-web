@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
+import { ToastContainer } from "@/components/ui/Toast";
 import "./globals.css";
-import { DeploymentNotificationProvider } from "@/components/DeploymentNotificationProvider";
-import { CallProviderWrapper } from "@/components/calls/CallProviderWrapper";
 import { I18nProvider } from "@/components/i18n/I18nProvider";
 import 'katex/dist/katex.min.css';
 
@@ -94,10 +93,8 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <I18nProvider />
-        <DeploymentNotificationProvider />
-        <CallProviderWrapper>
-          <ErrorBoundary>{children}</ErrorBoundary>
-        </CallProviderWrapper>
+        <ErrorBoundary>{children}</ErrorBoundary>
+        <ToastContainer />
       </body>
     </html>
   );

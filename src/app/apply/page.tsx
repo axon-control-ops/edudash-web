@@ -50,7 +50,7 @@ export default function ApplyPage() {
       setStatus("success");
       setMessage("Thanks! We will reach out with demo times shortly.");
       setEmail("");
-    } catch (err) {
+    } catch {
       setStatus("error");
       setMessage("We could not save your request. Please email support@edudashpro.org.za.");
     }
