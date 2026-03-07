@@ -62,42 +62,26 @@ export function generatePayFastSignature(
   // Sort keys alphabetically (CRITICAL for PayFast)
   const sortedKeys = Object.keys(data).sort();
   
-  console.log('[PayFast Signature] Sorted keys:', sortedKeys);
-  console.log('[PayFast Signature] Data values:', data);
-  
   for (const key of sortedKeys) {
     if (key !== 'signature') {
       const value = data[key];
       if (value !== undefined && value !== null && value !== '') {
         const encodedValue = encodeURIComponent(String(value).trim()).replace(/%20/g, '+');
         paramString += `${key}=${encodedValue}&`;
-        console.log(`[PayFast Signature] ${key}=${encodedValue}`);
       }
     }
   }
-  
+
   // Remove trailing &
   paramString = paramString.slice(0, -1);
-  
+
   // CRITICAL: PayFast sandbox does NOT use passphrase!
   // Only add passphrase for production mode
   if (!isSandbox && passphrase && passphrase.trim() !== '') {
     paramString += `&passphrase=${encodeURIComponent(passphrase.trim()).replace(/%20/g, '+')}`;
-    console.log('[PayFast Signature] Added passphrase to param string');
   }
-  
-  // Generate MD5 hash
-  const signature = crypto.createHash('md5').update(paramString).digest('hex');
-  
-  console.log('[PayFast Signature]', {
-    mode: isSandbox ? 'sandbox' : 'production',
-    hasPassphrase: !isSandbox && !!passphrase,
-    paramStringLength: paramString.length,
-    paramStringPreview: paramString.substring(0, 200) + '...',
-    signature,
-  });
-  
-  return signature;
+
+  return crypto.createHash('md5').update(paramString).digest('hex');
 }
 
 /**

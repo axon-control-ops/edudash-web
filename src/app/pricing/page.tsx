@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { toast } from "@/components/ui/Toast";
 import { ArrowLeft, Loader2 } from "lucide-react";
 
 type UserType = "parents" | "schools";
@@ -15,7 +16,6 @@ export default function PricingPage() {
   const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annual">("monthly");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isOnTrial, setIsOnTrial] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [processingPayment, setProcessingPayment] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
@@ -57,7 +57,6 @@ export default function PricingPage() {
           console.debug('Trial check failed:', err);
         }
       }
-      setLoading(false);
     };
     checkAuthAndTrial();
   }, [supabase]);
@@ -73,7 +72,7 @@ export default function PricingPage() {
 
   const trialDays = 7;
   const trialLabel = `${trialDays}-day free trial`;
-  const signUpRoute = userType === "parents" ? "/sign-up/parent" : "/sign-up/principal";
+  const signUpRoute = userType === "parents" ? "https://app.edudashpro.org.za/sign-up/parent" : "https://app.edudashpro.org.za/sign-up/principal";
 
   const handleSubscribe = async (planName: string, price: number) => {
     if (!isLoggedIn) {
@@ -82,12 +81,12 @@ export default function PricingPage() {
     }
 
     if (!userId || !userEmail) {
-      alert('Please log in to subscribe');
+      toast.warning('Please log in to subscribe');
       return;
     }
 
     if (price === 0) {
-      router.push('/dashboard/parent');
+      window.location.href = 'https://app.edudashpro.org.za/dashboard';
       return;
     }
 
@@ -95,14 +94,14 @@ export default function PricingPage() {
     const tierMap: Record<string, 'parent_starter' | 'parent_plus' | 'school_starter' | 'school_premium' | 'school_pro'> = {
       'Parent Starter': 'parent_starter',
       'Parent Plus': 'parent_plus',
-      'Starter Plan': 'school_starter',
-      'Premium Plan': 'school_premium',
-      'Enterprise Plan': 'school_pro',
+      'School Starter': 'school_starter',
+      'School Growth': 'school_premium',
+      'School Pro': 'school_pro',
     };
 
     const tier = tierMap[planName];
     if (!tier) {
-      alert('Invalid plan selected');
+      toast.error('Invalid plan selected');
       return;
     }
 
@@ -110,33 +109,15 @@ export default function PricingPage() {
 
     try {
       // Get current session for auth token
-      console.log('[Pricing] Starting payment flow...');
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      
-      console.log('[Pricing] Initial session check:', {
-        hasSession: !!session,
-        hasUser: !!session?.user,
-        userId: session?.user?.id,
-        hasAccessToken: !!session?.access_token,
-        tokenPreview: session?.access_token?.substring(0, 20),
-        sessionError: sessionError?.message,
-        expiresAt: session?.expires_at
-      });
-      
+
       // If no session, try to refresh
       if (!session || sessionError) {
-        console.log('[Pricing] No session found, attempting refresh...');
         const { data: { session: refreshedSession }, error: refreshError } = await supabase.auth.refreshSession();
-        
-        console.log('[Pricing] Refresh result:', {
-          hasRefreshedSession: !!refreshedSession,
-          refreshError: refreshError?.message
-        });
-        
+
         if (refreshError || !refreshedSession) {
-          console.error('[Pricing] Session refresh failed:', refreshError);
-          alert('Your session has expired. Please sign in again.');
-          router.push('/sign-in?redirect=/pricing');
+          toast.warning('Your session has expired. Please sign in again.');
+          window.location.href = 'https://app.edudashpro.org.za/sign-in?redirect=/pricing';
           setProcessingPayment(null);
           return;
         }
@@ -144,23 +125,15 @@ export default function PricingPage() {
 
       // Get the latest session
       const { data: { session: finalSession } } = await supabase.auth.getSession();
-      
-      console.log('[Pricing] Final session check:', {
-        hasFinalSession: !!finalSession,
-        hasAccessToken: !!finalSession?.access_token,
-        tokenLength: finalSession?.access_token?.length
-      });
-      
+
       if (!finalSession?.access_token) {
-        console.error('[Pricing] No access token available');
-        alert('Please log in to continue');
-        router.push('/sign-in?redirect=/pricing');
+        toast.warning('Please log in to continue');
+        window.location.href = 'https://app.edudashpro.org.za/sign-in?redirect=/pricing';
         setProcessingPayment(null);
         return;
       }
 
       // Call Supabase Edge Function to create payment
-      console.log('[Pricing] Calling payfast-create-payment Edge Function...');
       const { data, error } = await supabase.functions.invoke('payfast-create-payment', {
         body: {
           user_id: userId,
@@ -183,14 +156,12 @@ export default function PricingPage() {
 
       // Redirect to PayFast payment page
       if (data.payment_url) {
-        console.log('[Pricing] Redirecting to PayFast:', data.mode);
         window.location.href = data.payment_url;
       } else {
         throw new Error('No payment URL received');
       }
-    } catch (error) {
-      console.error('[Pricing] Payment failed:', error);
-      alert('Failed to initiate payment. Please try again.');
+    } catch {
+      toast.error('Failed to initiate payment. Please try again.');
       setProcessingPayment(null);
     }
   };
@@ -258,13 +229,14 @@ export default function PricingPage() {
       ]
     },
     {
-      name: "Starter Plan",
-      price: 299,
-      priceAnnual: 2990,
+      name: "School Starter",
+      price: 399,
+      priceAnnual: 3830,
       popular: true,
       features: [
-        "Essential features",
+        "Up to 100 learners",
         "Dash AI lesson builder + step-by-step guides",
+        "Attendance tracking",
         "Parent portal",
         "WhatsApp notifications",
         "Email support",
@@ -273,18 +245,34 @@ export default function PricingPage() {
       ]
     },
     {
-      name: "Premium Plan",
-      price: 599,
-      priceAnnual: 5990,
+      name: "School Growth",
+      price: 699,
+      priceAnnual: 6711,
       popular: false,
       features: [
+        "Up to 200 learners",
         "All Starter features",
-        "Advanced reporting",
+        "Gradebook & assessment tracking",
+        "Advanced reporting & analytics",
+        "NSNP meal tracking",
         "Priority support",
-        "Custom branding",
-        "API access",
-        "Advanced analytics",
         "Selected Grade 11–12 subjects"
+      ]
+    },
+    {
+      name: "School Pro",
+      price: 1499,
+      priceAnnual: 14390,
+      popular: false,
+      features: [
+        "Unlimited learners",
+        "All Growth features",
+        "SACE CPTD teacher portfolio",
+        "Custom branding",
+        "Dedicated success manager",
+        "SLA guarantee",
+        "API access",
+        "24/7 priority support"
       ]
     },
     {
@@ -293,10 +281,9 @@ export default function PricingPage() {
       priceAnnual: null,
       popular: false,
       features: [
-        "All Premium features",
-        "Unlimited users",
+        "All Pro features",
+        "Multi-campus management",
         "Dedicated success manager",
-        "SLA guarantee",
         "White-label solution",
         "Base platform fee + per-seat pricing",
         "AI credits bundle + overage",
@@ -401,7 +388,7 @@ export default function PricingPage() {
             </Link>
             {isLoggedIn ? (
               <button
-                onClick={() => router.push('/dashboard/parent')}
+                onClick={() => window.location.href = 'https://app.edudashpro.org.za/dashboard'}
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -420,7 +407,7 @@ export default function PricingPage() {
                 Back to Dashboard
               </button>
             ) : (
-              <Link href="/sign-in" style={{ color: "#00f5ff", textDecoration: "none", fontSize: "14px", fontWeight: 600 }}>Sign In</Link>
+              <a href="https://app.edudashpro.org.za/sign-in" style={{ color: "#00f5ff", textDecoration: "none", fontSize: "14px", fontWeight: 600 }}>Sign In</a>
             )}
           </div>
         </header>

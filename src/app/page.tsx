@@ -6,7 +6,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { Space_Grotesk, Fraunces } from "next/font/google";
 import { createClient } from "@/lib/supabase/client";
 import {
-  Building2, Users, Sparkles, CreditCard, Cpu, Phone,
+  Users, Sparkles, CreditCard,
   Shield, GraduationCap, Heart, CheckCircle, ArrowRight,
   BarChart3, BookOpen, Calendar, Globe, MessageSquare,
   Star, TrendingUp, Zap, ChevronDown, ChevronUp, Mic,
@@ -25,7 +25,7 @@ const fraunces = Fraunces({
   weight: ["400", "600", "700"],
 });
 
-const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.edudashpro";
+const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.edudashpro.app";
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -127,7 +127,7 @@ export default function Home() {
         "Full audit trail and compliance reporting",
       ],
       cta: "Register your school",
-      href: "/sign-up/principal",
+      href: "https://app.edudashpro.org.za/sign-up/principal",
       color: "#7c3aed",
     },
     teacher: {
@@ -140,7 +140,7 @@ export default function Home() {
         "Exam and quiz creation with automatic marking",
       ],
       cta: "Start free trial",
-      href: "/sign-up/teacher",
+      href: "https://app.edudashpro.org.za/sign-up/teacher",
       color: "#0891b2",
     },
     parent: {
@@ -227,7 +227,7 @@ export default function Home() {
                 {link.label}
               </button>
             ))}
-            <Link href="/sign-in" className={styles.primaryGhost}>Sign In</Link>
+            <a href="https://app.edudashpro.org.za/sign-in" className={styles.primaryGhost}>Sign In</a>
             <Link href="/apply" className={styles.primarySolid}>Book Demo</Link>
           </nav>
           <button className={styles.navToggle} onClick={() => setMobileMenuOpen((p) => !p)} aria-label="Toggle menu">
@@ -242,7 +242,7 @@ export default function Home() {
               </button>
             ))}
             <div className={styles.navMobileCtas}>
-              <Link href="/sign-in" className={styles.primaryGhost}>Sign In</Link>
+              <a href="https://app.edudashpro.org.za/sign-in" className={styles.primaryGhost}>Sign In</a>
               <Link href="/apply" className={styles.primarySolid}>Book Demo</Link>
             </div>
           </div>
@@ -455,7 +455,7 @@ export default function Home() {
               <Zap size={20} color="#22d3ee" />
               <span>Dash AI is available on all paid plans. Try it free for 14 days — no card required.</span>
             </div>
-            <Link href="/sign-in" className={styles.primarySolid}>Explore Dash AI</Link>
+            <a href="https://app.edudashpro.org.za/sign-in" className={styles.primarySolid}>Explore Dash AI</a>
           </div>
         </section>
 
@@ -512,7 +512,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <p className={styles.appNote}>Web app for schools available at <Link href="/sign-in" className={styles.inlineLink}>edudashpro.org.za/sign-in</Link></p>
+              <p className={styles.appNote}>Web app for schools available at <a href="https://app.edudashpro.org.za/sign-in" className={styles.inlineLink}>app.edudashpro.org.za</a></p>
             </div>
             <div className={`${styles.appMockupWrap} ${styles.reveal}`} data-reveal>
               <div className={styles.phoneMockup}>
@@ -541,12 +541,13 @@ export default function Home() {
             <div className={`${styles.reveal}`} data-reveal>
               <span className={styles.sectionLabel}>Pricing</span>
               <h2>Flexible tiers for every school size.</h2>
-              <p>Start with a 14-day free trial. No credit card. Upgrade when you are ready — plans from R99/month for parents to R999/month for large schools.</p>
+              <p>Start with a 14-day free trial. No credit card. Upgrade when you are ready — plans from R99/month for parents to R1,499/month for large schools.</p>
               <div className={styles.pricingHighlights}>
                 {[
-                  { tier: "Parent", price: "R99", sub: "/month · Early bird 50% off" },
-                  { tier: "School Starter", price: "R299", sub: "/month · Up to 50 learners" },
-                  { tier: "School Pro", price: "R999", sub: "/month · Unlimited + full AI" },
+                  { tier: "Parent", price: "R99", sub: "/month · Homework help + exam prep" },
+                  { tier: "School Starter", price: "R399", sub: "/month · Up to 50 learners" },
+                  { tier: "School Growth", price: "R699", sub: "/month · Up to 200 learners" },
+                  { tier: "School Pro", price: "R1,499", sub: "/month · Unlimited + full AI" },
                 ].map((p) => (
                   <div key={p.tier} className={styles.pricingTierRow}>
                     <strong>{p.tier}</strong>
@@ -633,7 +634,7 @@ export default function Home() {
           </div>
           <div className={styles.footerLinksGroup}>
             <strong>Platform</strong>
-            <Link href="/sign-in">Sign In</Link>
+            <a href="https://app.edudashpro.org.za/sign-in">Sign In</a>
             <Link href="/pricing">Pricing</Link>
             <Link href="/apply">Book Demo</Link>
             <a href={PLAY_STORE_URL} target="_blank" rel="noopener">Android App</a>

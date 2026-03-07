@@ -63,15 +63,33 @@
     }
   ],
 "redirects": [
-  {
-    "source": "/data-deletion-request",
-    "destination": "/data-deletion",
-    "permanent": true
-  },
-  {
-    "source": "/data-deletion.html",
-    "destination": "/data-deletion",
-    "permanent": true
-  }
+  { "source": "/data-deletion-request", "destination": "/data-deletion", "permanent": true },
+  { "source": "/data-deletion.html", "destination": "/data-deletion", "permanent": true },
+
+  { "source": "/sign-in", "destination": "https://app.edudashpro.org.za/sign-in", "permanent": false },
+  { "source": "/sign-up", "destination": "https://app.edudashpro.org.za/sign-up", "permanent": false },
+  { "source": "/sign-up/:path*", "destination": "https://app.edudashpro.org.za/sign-up/:path*", "permanent": false },
+  { "source": "/forgot-password", "destination": "https://app.edudashpro.org.za/forgot-password", "permanent": false },
+  { "source": "/reset-password", "destination": "https://app.edudashpro.org.za/reset-password", "permanent": false },
+  { "source": "/auth-callback", "destination": "https://app.edudashpro.org.za/auth-callback", "permanent": false },
+  { "source": "/auth-callback/:path*", "destination": "https://app.edudashpro.org.za/auth-callback/:path*", "permanent": false },
+  { "source": "/dashboard", "destination": "https://app.edudashpro.org.za/dashboard", "permanent": false },
+  { "source": "/dashboard/:path*", "destination": "https://app.edudashpro.org.za/dashboard/:path*", "permanent": false },
+  { "source": "/invite/:path*", "destination": "https://app.edudashpro.org.za/invite/:path*", "permanent": false },
+  { "source": "/exam-prep", "destination": "https://app.edudashpro.org.za/exam-prep", "permanent": false },
+  { "source": "/exam-prep/:path*", "destination": "https://app.edudashpro.org.za/exam-prep/:path*", "permanent": false },
+  { "source": "/admin", "destination": "https://app.edudashpro.org.za/admin", "permanent": false },
+  { "source": "/admin/:path*", "destination": "https://app.edudashpro.org.za/admin/:path*", "permanent": false },
+  { "source": "/aftercare", "destination": "https://app.edudashpro.org.za/aftercare", "permanent": false },
+  { "source": "/aftercare/:path*", "destination": "https://app.edudashpro.org.za/aftercare/:path*", "permanent": false },
+  { "source": "/ecd", "destination": "https://app.edudashpro.org.za/ecd", "permanent": false },
+  { "source": "/ecd/:path*", "destination": "https://app.edudashpro.org.za/ecd/:path*", "permanent": false },
+  { "source": "/display", "destination": "https://app.edudashpro.org.za/display", "permanent": false },
+  { "source": "/display/:path*", "destination": "https://app.edudashpro.org.za/display/:path*", "permanent": false },
+  { "source": "/registration", "destination": "https://app.edudashpro.org.za/registration", "permanent": false },
+  { "source": "/registration/:path*", "destination": "https://app.edudashpro.org.za/registration/:path*", "permanent": false },
+  { "source": "/teacher-signup", "destination": "https://app.edudashpro.org.za/teacher-signup", "permanent": false },
+  { "source": "/auth", "destination": "https://app.edudashpro.org.za/auth", "permanent": false },
+  { "source": "/auth/:path*", "destination": "https://app.edudashpro.org.za/auth/:path*", "permanent": false }
 ]
 }

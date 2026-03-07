@@ -50,12 +50,8 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Also log to console for visibility
-    console.log(`[Early Access] New signup: ${email} at ${new Date().toISOString()}`);
-
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Early access notification error:', error);
+  } catch {
     return NextResponse.json({ success: true }); // Don't expose errors
   }
 }
