@@ -77,7 +77,7 @@ export default function PricingPage() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const trialDays = 7;
+  const trialDays = 14;
   const trialLabel = `${trialDays}-day free trial`;
   const appBaseUrl = "https://app.edudashpro.org.za";
   const appDashboardUrl = `${appBaseUrl}/dashboard`;

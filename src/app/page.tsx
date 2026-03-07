@@ -185,14 +185,14 @@ export default function Home() {
   const stats = [
     { value: "2.4×", label: "faster lesson planning", sub: "vs manual methods" },
     { value: "94%", label: "attendance tracking rate", sub: "in active schools" },
-    { value: "R299", label: "per month from", sub: "full school tier" },
+    { value: "R399", label: "per month from", sub: "full school tier" },
     { value: "11", label: "SA official languages", sub: "supported in Dash AI" },
   ];
 
   const faqs = [
     { q: "Do I need the mobile app or the website?", a: "Schools and teachers use the web platform for administration. Parents and learners get the best experience on the mobile app (Android now, iOS coming soon). Both sync in real time." },
     { q: "Is EduDash Pro aligned with the CAPS curriculum?", a: "Yes. Lesson plans, exams, and activities are structured around CAPS learning outcomes for Grade R through Grade 12. Private and homeschool curricula are supported too." },
-    { q: "How does billing work?", a: "Schools choose a monthly tier starting at R299. Parents pay separately for the parent app if their school hasn't included it. PayFast handles all South African payments securely." },
+    { q: "How does billing work?", a: "Schools choose a monthly tier starting at R399. Parents pay separately for the parent app if their school hasn't included it. PayFast handles all South African payments securely." },
     { q: "Can parents use the platform without the school being registered?", a: "Parents can join as standalone users and use Dash AI, exam prep, and homework help independently. School features activate when a school admin links your account." },
     { q: "Is our school data stored in South Africa?", a: "Yes. EduDash Pro uses Supabase with a South African region. We are POPIA-compliant with consent flows, data deletion tools, and a full audit trail." },
     { q: "Can we trial before committing?", a: "Every new school gets a 14-day full-feature trial. No credit card required to start." },
