@@ -1,22 +1,46 @@
-# Copilot Instructions — EduDash Pro Web Portal
+# Copilot Instructions — EduDash Pro Marketing Website
 
-## Project Overview
+## Project Purpose
 
-**EduDash Pro Web** is the Next.js web portal for EduDash Pro — a multi-tenant, AI-powered educational platform for South African schools and preschools. It shares a Supabase backend with the React Native mobile app (`../dashpro`).
+**This repo is the marketing website only.** It is NOT the web application.
+
+| What | Where |
+|------|-------|
+| Marketing site (this repo) | `edudashpro.org.za` — landing, pricing, legal, careers |
+| Web app | `app.edudashpro.org.za` — deployed from `../dashpro` (Expo web) |
+| Mobile app | iOS / Android — deployed from `../dashpro` (React Native) |
+
+**Rule: This repo contains NO authenticated app code.** Any route that requires auth, renders dashboards, or provides app functionality must redirect to `https://app.edudashpro.org.za`.
+
+### Routes that belong in this repo
+- `/` — landing page
+- `/pricing` — pricing and tier comparison
+- `/privacy`, `/terms`, `/popia` — legal pages
+- `/jobs`, `/apply` — careers
+- `/sitemap.ts` — SEO
+
+### Routes that must redirect → `app.edudashpro.org.za`
+Any route not in the list above. Add them to `vercel.json` as permanent redirects, not as Next.js pages.
+
+---
+
+## Project Overview (marketing context)
+
+**EduDash Pro** is a multi-tenant, AI-powered educational platform for South African schools and preschools. This marketing site presents the platform to prospective users and directs them to the app.
 
 **Stack:**
 | Layer | Stack |
 |-------|-------|
 | Framework | Next.js 16 (App Router) + React 19 |
 | Styling | TailwindCSS 4 |
-| Backend | Supabase (PostgreSQL + RLS + Auth + Edge Functions) |
-| State | TanStack React Query 5 |
-| AI | Claude (Anthropic) via `ai-proxy` Edge Function |
-| Payments | PayFast (South Africa) via `payfast-create-payment` Edge Function |
+| Payments (pricing CTA) | PayFast via `payfast-create-payment` Edge Function |
 | i18n | `react-i18next`, 9 languages: en, af, zu, st, nso, fr, pt, es, de |
 | Error tracking | Sentry (`@sentry/nextjs`) |
+| Analytics | PostHog (optional) |
 
-**Multi-tenant model:** Every school is a tenant (`preschool_id` / `organization_id`). All Supabase tables enforce RLS. Super-admins bypass RLS via service role.
+Supabase is used only for:
+- `early_access_signups` table (email capture from landing page)
+- Read-only public data (pricing tiers, feature flags for landing page display)
 
 ---
 
@@ -85,104 +109,71 @@ supabase db diff
 
 ---
 
-## Route Structure
+## Route Structure (marketing pages only)
 
 ```
 src/app/
-├── page.tsx / page.module.css     # Landing page
-├── sign-in/                       # Email/password + Google OAuth
-├── sign-up/
-│   ├── principal/                 # 4-step org registration
-│   ├── teacher/                   # With invite code support
-│   ├── parent/                    # With org selection, standalone support
-│   ├── organization/              # Org type selector
-│   ├── verify-email/
-│   └── pending-approval/
-├── auth-callback/                 # Supabase magic links, PKCE, OAuth
-├── forgot-password/
-├── reset-password/
-├── dashboard/                     # Role-based redirect hub
-│   ├── page.tsx                   # Routes by role
-│   ├── teacher/
-│   ├── principal/
-│   ├── parent/
-│   ├── student/                   # TODO: implement web learner dashboard
-│   └── admin/
-├── invite/teacher/, member/, executive/
-├── pricing/                       # PayFast integration
-├── exam-prep/                     # Standalone CAPS exam prep
-├── admin/                         # Super-admin tools
-└── api/                           # 14 API route directories
+├── page.tsx / page.module.css     # Landing page ✅ stays here
+├── pricing/                       # Pricing tiers ✅ stays here
+├── privacy/                       # Privacy policy ✅ stays here
+├── terms/                         # Terms of service ✅ stays here
+├── popia/                         # POPIA compliance ✅ stays here
+├── jobs/                          # Job listings ✅ stays here
+├── apply/                         # Job applications ✅ stays here
+├── data-deletion/                 # GDPR/POPIA deletion request ✅ stays here
+├── sitemap.ts                     # SEO sitemap ✅ stays here
+└── api/                           # Only public/webhook API routes
 ```
+
+All other routes currently in the repo (sign-in, sign-up, dashboard, auth-callback,
+invite, exam-prep, admin, aftercare, ecd, display, registration, teacher-signup)
+**must be migrated to redirects** pointing to `https://app.edudashpro.org.za`.
 
 ---
 
-## Key Architectural Patterns
+## Key Patterns
 
-### 1. Authentication & Supabase Client
+### Redirecting App Routes
 
+Any link on the marketing site that takes a user into the app must use full URLs:
 ```typescript
-// Browser (client components)
-import { createClient } from '@/lib/supabase/client';
+// ✅ Correct — sends user to the app
+<a href="https://app.edudashpro.org.za/sign-in">Sign In</a>
+<a href="https://app.edudashpro.org.za/sign-up/principal">Get Started</a>
 
-// Server (server components, API routes)
-import { createClient } from '@/lib/supabase/server';
+// ❌ Wrong — creates a page in the marketing site
+<Link href="/sign-in">Sign In</Link>
 ```
 
-- Auth handled via `@supabase/ssr` — use `createClient()` from the appropriate module.
-- Session cookies managed by middleware at `src/middleware.ts`.
-- Role-based routing in `src/app/dashboard/page.tsx` — reads `profiles.role` and redirects.
-
-### 2. Role-Based Access
-
-User roles: `super_admin`, `principal`, `teacher`, `parent`, `student`
-
-```typescript
-// Always check role before rendering or executing
-const { data: profile } = await supabase
-  .from('profiles')
-  .select('role, organization_id, preschool_id')
-  .eq('auth_user_id', user.id)
-  .single();
-
-if (profile.role !== 'principal') redirect('/dashboard');
-```
-
-### 3. Data Fetching — React Query
-
-```typescript
-export function useTeachers(orgId: string) {
-  return useQuery({
-    queryKey: ['teachers', orgId],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('teachers')
-        .select('*')
-        .eq('preschool_id', orgId);
-      if (error) throw error;
-      return data;
-    },
-    staleTime: 60_000,
-  });
+For vercel.json redirects (existing routes that used to be app pages):
+```json
+{
+  "redirects": [
+    { "source": "/sign-in", "destination": "https://app.edudashpro.org.za/sign-in", "permanent": false },
+    { "source": "/dashboard/:path*", "destination": "https://app.edudashpro.org.za/dashboard/:path*", "permanent": false }
+  ]
 }
 ```
 
-### 4. Edge Function Calls
+### Supabase Usage (limited)
 
+Only for unauthenticated public reads and email capture:
 ```typescript
-const supabase = createClient();
-const { data, error } = await supabase.functions.invoke('ai-proxy', {
-  body: { messages, service_type: 'chat_message', model: 'claude-haiku-4-5-20251001' },
-});
+// ✅ Email capture on landing page
+const { error } = await supabase
+  .from('early_access_signups')
+  .insert({ email, created_at: new Date().toISOString() });
+
+// ❌ Never query auth-protected tables from the marketing site
 ```
 
-### 5. Invite Deep Linking
+### PayFast CTAs (pricing page)
 
-Invite routes detect platform (iOS/Android/desktop) and deep-link to native app:
-- Teacher: `edudashpro:///screens/teacher-invite-accept?token=...&email=...`
-- Member: `edudashpro:///invite/member?code=...`
-- Executive: `edudashpro:///invite/executive?code=...`
-- Fallback: web sign-in/sign-up with pending invite in `localStorage`.
+The pricing page can link to checkout URLs via Edge Function, but the user must be authenticated first — so the CTA redirects to the app:
+```typescript
+// Pricing page CTA → sends to app sign-up with plan pre-selected
+href={`https://app.edudashpro.org.za/sign-up?plan=${tier}`}
+```
 
 ---
 
@@ -206,15 +197,11 @@ Invite routes detect platform (iOS/Android/desktop) and deep-link to native app:
 
 ---
 
-## Shared Utilities (avoid reinventing)
+## Shared Utilities
 
 - `src/lib/utils/` — general helpers
-- `src/lib/supabase/client.ts` — browser Supabase client
-- `src/lib/supabase/server.ts` — server Supabase client
-- `src/lib/ai/capabilities.ts` — AI tier/capability matrix
-- `src/lib/hooks/useUserProfile.ts` — current user profile + school context
-- `src/lib/hooks/useAIQuota.ts` — AI usage tracking
-- `src/lib/auth/recoveryFlow.ts` — password recovery detection
+- `src/lib/supabase/client.ts` — browser Supabase client (for email capture only)
+- `src/lib/metadata/` — SEO metadata helpers for marketing pages
 
 ---
 
@@ -265,13 +252,12 @@ npm test   # Jest
 
 ## Code Review Checklist
 
+- [ ] Change is to a marketing page — if not, it belongs in `dashpro` not here
+- [ ] No authenticated routes or app logic added
+- [ ] App links use full `https://app.edudashpro.org.za/...` URLs, not relative paths
 - [ ] File size limits respected (≤400 components, ≤500 pages, ≤200 hooks)
 - [ ] No `console.log` / `alert()` in production code
-- [ ] All data fetching has loading, error, and empty states
-- [ ] RBAC: role checked before rendering restricted UI
-- [ ] Multi-tenant: queries filtered by `organization_id` / `preschool_id`
-- [ ] AI calls go through `ai-proxy` Edge Function, not directly
-- [ ] Storage paths stored, not signed URLs
-- [ ] Zod validation on all user input
+- [ ] Zod validation on any form input (email capture, job applications)
 - [ ] TypeScript types correct — run `npm run typecheck`
 - [ ] No secrets committed
+- [ ] SEO: meta tags present on all public pages
