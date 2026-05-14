@@ -127,7 +127,7 @@ export default function Home() {
         "Full audit trail and compliance reporting",
       ],
       cta: "Register your school",
-      href: "https://app.edudashpro.org.za/sign-up/principal",
+      href: "/registration",
       color: "#7c3aed",
     },
     teacher: {

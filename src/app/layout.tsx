@@ -90,6 +90,11 @@ export default function RootLayout({
         <meta name="theme-color" content="#111111" />
         <meta name="format-detection" content="telephone=no" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5506438806314781"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <I18nProvider />
