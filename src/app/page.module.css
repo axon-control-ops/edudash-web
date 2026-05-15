@@ -505,6 +505,76 @@
 .featureCard h3 { font-size: 1rem; font-weight: 700; margin: 0 0 0.5rem; color: #f1f5f9; }
 .featureCard p { font-size: 0.875rem; color: #94a3b8; line-height: 1.6; margin: 0; }
 
+/* ─── AFTERCARE SPOTLIGHT ────────────────────── */
+.aftercareSpotlight {
+  display: grid;
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.aftercareSpotlightCopy,
+.aftercareSpotlightPanel {
+  background: rgba(15,23,42,0.72);
+  border: 1px solid rgba(148,163,184,0.12);
+  border-radius: 20px;
+  padding: 2rem;
+}
+
+.aftercareSpotlightCopy h2,
+.aftercareSpotlightPanel h3 {
+  font-family: var(--font-serif), Georgia, serif;
+  letter-spacing: -0.02em;
+  margin: 0 0 1rem;
+  color: #f8fafc;
+}
+
+.aftercareSpotlightCopy h2 {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+}
+
+.aftercareSpotlightCopy p,
+.aftercareSpotlightPanel p {
+  color: #94a3b8;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.aftercareList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-top: 1.5rem;
+}
+
+.aftercareListItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  color: #e2e8f0;
+  font-size: 0.95rem;
+}
+
+.aftercareSpotlightPanel {
+  background:
+    linear-gradient(180deg, rgba(34,211,238,0.08), rgba(124,58,237,0.08)),
+    rgba(15,23,42,0.78);
+}
+
+.aftercareSpotlightBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.75rem;
+  margin-bottom: 1rem;
+  border-radius: 999px;
+  background: rgba(34,211,238,0.12);
+  border: 1px solid rgba(34,211,238,0.28);
+  color: #67e8f9;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 /* ─── ROLE TABS ───────────────────────────────── */
 .roleTabs {
   display: flex;
@@ -1094,6 +1164,7 @@
   .navToggle { display: none; }
   .hero { grid-template-columns: 1fr 1fr; padding: 6rem 0 5rem; }
   .heroContent { max-width: none; }
+  .aftercareSpotlight { grid-template-columns: 1.2fr 0.8fr; }
   .rolePanel { grid-template-columns: 1fr 1fr; }
   .sectionSplit { grid-template-columns: 1fr 1fr; }
   .appDownloadSection { grid-template-columns: 1fr 1fr; }

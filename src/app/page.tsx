@@ -26,6 +26,8 @@ const fraunces = Fraunces({
 });
 
 const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.edudashpro.app";
+const SCHOOL_SIGN_UP_URL = "https://app.edudashpro.org.za/sign-up/principal";
+const AFTERCARE_REGISTRATION_URL = "https://app.edudashpro.org.za/screens/parent-aftercare-registration";
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -266,13 +268,16 @@ export default function Home() {
               administration into one intelligent workspace — built for South African schools from day one.
             </p>
             <div className={styles.heroCtas}>
+              <Link href="/registration" className={styles.primarySolidLarge}>
+                Register your school <ArrowRight size={16} />
+              </Link>
               <Link href="/apply" className={styles.primarySolidLarge}>
                 Book a live demo <ArrowRight size={16} />
               </Link>
-              <Link href={PLAY_STORE_URL} target="_blank" rel="noopener" className={styles.appStoreCta}>
-                <Image src="/icon-192.png" alt="" width={20} height={20} className={styles.appStoreCtaIcon} />
-                Get the Android app
-              </Link>
+              <a href={AFTERCARE_REGISTRATION_URL} className={styles.appStoreCta}>
+                <ClipboardList size={18} />
+                Aftercare Registration
+              </a>
             </div>
             <div className={styles.heroPlatformNote}>
               <span>🖥️ Web platform for schools</span>
@@ -361,6 +366,50 @@ export default function Home() {
                 </div>
               );
             })}
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <div className={styles.aftercareSpotlight}>
+            <div className={`${styles.aftercareSpotlightCopy} ${styles.reveal}`} data-reveal>
+              <span className={styles.sectionLabel}>Aftercare program</span>
+              <h2>Aftercare is a front-and-center offer, not a hidden add-on.</h2>
+              <p>
+                Families can clearly see that EduDash Pro supports aftercare registrations, daily sign-in,
+                homework supervision, secure pickup, and guardian updates. School onboarding and aftercare
+                enquiries now have separate paths.
+              </p>
+              <div className={styles.aftercareList}>
+                <div className={styles.aftercareListItem}>
+                  <CheckCircle size={16} color="#22c55e" />
+                  <span>Dedicated aftercare landing page at <strong>/aftercare</strong></span>
+                </div>
+                <div className={styles.aftercareListItem}>
+                  <CheckCircle size={16} color="#22c55e" />
+                  <span>Clear school registration route at <strong>/registration</strong></span>
+                </div>
+                <div className={styles.aftercareListItem}>
+                  <CheckCircle size={16} color="#22c55e" />
+                  <span>Messaging focused on safety, homework support, and parent communication</span>
+                </div>
+              </div>
+            </div>
+            <div className={`${styles.aftercareSpotlightPanel} ${styles.reveal}`} data-reveal>
+              <div className={styles.aftercareSpotlightBadge}>Grades R-7</div>
+              <h3>Structured afternoons with clear handover.</h3>
+              <p>
+                Market the aftercare offer directly while keeping the main EduDash Pro school onboarding flow
+                separate from family-facing program interest.
+              </p>
+              <div className={styles.sectionButtons}>
+                <a href={AFTERCARE_REGISTRATION_URL} className={styles.primarySolid}>
+                  Aftercare Registration
+                </a>
+                <a href={SCHOOL_SIGN_UP_URL} className={styles.primaryGhostLarge} target="_blank" rel="noopener">
+                  Open school signup
+                </a>
+              </div>
+            </div>
           </div>
         </section>
 
