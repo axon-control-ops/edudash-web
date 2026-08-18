@@ -690,7 +690,6 @@ export default function Home() {
           </div>
           <div className={styles.footerLinksGroup}>
             <strong>Company</strong>
-            <Link href="/jobs">Careers</Link>
             <Link href="/terms">Terms</Link>
             <Link href="/privacy">Privacy</Link>
             <Link href="/popia">POPIA</Link>

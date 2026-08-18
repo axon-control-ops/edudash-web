@@ -16,7 +16,17 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.NEXT_PUBLIC_WEB_URL ||
+  "https://edudashpro.org.za"
+).replace(/\/$/, "");
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  alternates: {
+    canonical: "/",
+  },
   title: {
     default: "EduDash Pro — AI-Powered Educational Platform for South Africa",
     template: "%s | EduDash Pro",
