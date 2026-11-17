@@ -10,7 +10,7 @@ import {
   Shield, GraduationCap, Heart, CheckCircle, ArrowRight,
   BarChart3, BookOpen, Calendar, Globe, MessageSquare,
   Star, TrendingUp, Zap, ChevronDown, ChevronUp, Mic,
-  FileText, ClipboardList, BellRing, Lock,
+  FileText, ClipboardList, BellRing, Lock, MessageCircle,
 } from "lucide-react";
 import styles from "./page.module.css";
 
@@ -28,6 +28,8 @@ const fraunces = Fraunces({
 const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.edudashpro.app";
 const SCHOOL_SIGN_UP_URL = "https://app.edudashpro.org.za/sign-up/principal";
 const AFTERCARE_REGISTRATION_URL = "https://app.edudashpro.org.za/screens/parent-aftercare-registration";
+const WHATSAPP_NUMBER = "27674770975";
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hi! I'd like to know more about EduDash Pro.")}`;
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -166,12 +168,12 @@ export default function Home() {
     { icon: BookOpen, title: "Exam & Quiz Engine", desc: "Auto-generate, distribute, and mark assessments. Grade R through Matric.", tag: "Learning" },
     { icon: MessageSquare, title: "Messaging & Calls", desc: "Threaded parent-teacher messaging, voice notes, and video lessons in one place.", tag: "Comms" },
     { icon: CreditCard, title: "Fee Management", desc: "PayFast-integrated invoicing, proof-of-payment review, and automatic reminders.", tag: "Billing" },
-    { icon: Calendar, title: "Daily Programme", desc: "Preschool routine planner with activity builder, menus, and display screens.", tag: "Preschool" },
-    { icon: Globe, title: "11 SA Languages", desc: "Interface and Dash AI available in English, Afrikaans, isiZulu, isiXhosa, and more.", tag: "Localisation" },
+    { icon: Calendar, title: "Daily Programme", desc: "Preschool routine planner with an activity builder and live classroom display screens.", tag: "Preschool" },
+    { icon: Globe, title: "5 SA Languages", desc: "Interface and Dash AI available in English, Afrikaans, isiZulu, Sesotho, and Sepedi.", tag: "Localisation" },
     { icon: BellRing, title: "Smart Notifications", desc: "Push alerts for payments, messages, homework, and critical school events.", tag: "Engagement" },
     { icon: Mic, title: "Voice AI Tutor", desc: "Dash AI speaks with learners — phonics coaching, homework help, and encouragement.", tag: "AI" },
-    { icon: FileText, title: "POPIA Compliance", desc: "Data stored in South Africa. Built-in consent flows and data deletion tools.", tag: "Compliance" },
-    { icon: ClipboardList, title: "Aftercare Suite", desc: "Aftercare registrations, daily sign-in, and guardian comms fully automated.", tag: "Programs" },
+    { icon: FileText, title: "POPIA Compliance", desc: "Built-in consent flows and self-service data deletion tools for South African privacy law.", tag: "Compliance" },
+    { icon: ClipboardList, title: "Aftercare Suite", desc: "Aftercare registrations with automated guardian confirmation and payment emails.", tag: "Programs" },
     { icon: Lock, title: "Role-Based Access", desc: "Principal, teacher, parent, learner, and super-admin roles with scoped permissions.", tag: "Security" },
   ];
 
@@ -188,7 +190,7 @@ export default function Home() {
     { value: "2.4×", label: "faster lesson planning", sub: "vs manual methods" },
     { value: "94%", label: "attendance tracking rate", sub: "in active schools" },
     { value: "R399", label: "per month from", sub: "full school tier" },
-    { value: "11", label: "SA official languages", sub: "supported in Dash AI" },
+    { value: "5", label: "SA official languages", sub: "supported in Dash AI" },
   ];
 
   const faqs = [
@@ -196,7 +198,7 @@ export default function Home() {
     { q: "Is EduDash Pro aligned with the CAPS curriculum?", a: "Yes. Lesson plans, exams, and activities are structured around CAPS learning outcomes for Grade R through Grade 12. Private and homeschool curricula are supported too." },
     { q: "How does billing work?", a: "Schools choose a monthly tier starting at R399. Parents pay separately for the parent app if their school hasn't included it. PayFast handles all South African payments securely." },
     { q: "Can parents use the platform without the school being registered?", a: "Parents can join as standalone users and use Dash AI, exam prep, and homework help independently. School features activate when a school admin links your account." },
-    { q: "Is our school data stored in South Africa?", a: "Yes. EduDash Pro uses Supabase with a South African region. We are POPIA-compliant with consent flows, data deletion tools, and a full audit trail." },
+    { q: "Is EduDash Pro POPIA-compliant?", a: "Yes. Consent flows, self-service data deletion, and a full audit trail are built into the platform, in line with South Africa's POPIA requirements." },
     { q: "Can we trial before committing?", a: "Every new school gets a 14-day full-feature trial. No credit card required to start." },
   ];
 
@@ -215,6 +217,16 @@ export default function Home() {
     <div className={`${styles.page} ${spaceGrotesk.variable} ${fraunces.variable}`}>
       <div className={styles.backgroundGlow} />
       <div className={styles.backgroundNoise} />
+
+      <a
+        href={WHATSAPP_URL}
+        target="_blank"
+        rel="noopener"
+        className={styles.whatsappFloat}
+        aria-label="Chat with EduDash Pro on WhatsApp"
+      >
+        <MessageCircle size={26} strokeWidth={2} />
+      </a>
 
       {/* ── NAV ── */}
       <header className={styles.header}>
@@ -293,18 +305,33 @@ export default function Home() {
             <div className={styles.dashboardPreview}>
               <div className={styles.previewHeader}>
                 <div className={styles.previewDots}><span /><span /><span /></div>
-                <span className={styles.previewTitle}>EduDash Pro — Principal Dashboard</span>
+                <span className={styles.previewTitle}>EduDash Pro — Principal Command Centre</span>
               </div>
               <div className={styles.previewBody}>
                 <div className={styles.previewSidebar}>
-                  {["Dashboard","Students","Teachers","Attendance","Lessons","Finances","Messages","Dash AI"].map((item, i) => (
+                  {["Today","Admissions","Staff","Parents","Fees","Messages","Dashboards","Ask Dash"].map((item, i) => (
                     <div key={item} className={styles.previewNavItem} style={{ opacity: i === 0 ? 1 : 0.55 }}>{item}</div>
                   ))}
                 </div>
                 <div className={styles.previewContent}>
                   <div className={styles.previewStatRow}>
-                    {[{v:"312",l:"Learners"},{v:"94%",l:"Attendance"},{v:"R48.2k",l:"Fees due"},{v:"7",l:"AI reports"}].map(s => (
+                    {[{v:"142",l:"Enrolled"},{v:"128",l:"Present"},{v:"18",l:"Staff"},{v:"R48.7k",l:"Revenue MTD"}].map(s => (
                       <div key={s.l} className={styles.previewStat}><span>{s.v}</span><small>{s.l}</small></div>
+                    ))}
+                  </div>
+                  <div className={styles.previewDoNow}>
+                    <div className={styles.previewDoNowHeader}>
+                      <span>Do Now</span>
+                      <span className={styles.previewDoNowBadge}>3</span>
+                    </div>
+                    {[
+                      { text: "3 POP approvals pending", color: "#f87171" },
+                      { text: "2 registration requests", color: "#60a5fa" },
+                      { text: "1 leave request", color: "#34d399" },
+                    ].map((item) => (
+                      <div key={item.text} className={styles.previewDoNowItem} style={{ borderLeftColor: item.color }}>
+                        {item.text}
+                      </div>
                     ))}
                   </div>
                   <div className={styles.previewChartArea}>
@@ -315,22 +342,10 @@ export default function Home() {
                       ))}
                     </div>
                   </div>
-                  <div className={styles.previewActivityRow}>
-                    {[
-                      { dot:"#7c3aed", text:"Dash AI — 4 lesson suggestions ready" },
-                      { dot:"#22d3ee", text:"Fee reminder sent — 38 families" },
-                      { dot:"#22c55e", text:"Grade 5 exam marked — avg 68%" },
-                    ].map(a => (
-                      <div key={a.text} className={styles.previewActivity}>
-                        <div className={styles.previewActivityDot} style={{ background: a.dot }} />
-                        <span>{a.text}</span>
-                      </div>
-                    ))}
-                  </div>
                 </div>
               </div>
             </div>
-            <p className={styles.videoCaption}>Principal dashboard — live attendance, fees, AI insights, and communication in one view.</p>
+            <p className={styles.videoCaption}>Principal Command Centre — live attendance, fees, approvals, and communication in one view.</p>
           </div>
         </section>
 
@@ -375,9 +390,8 @@ export default function Home() {
               <span className={styles.sectionLabel}>Aftercare program</span>
               <h2>Aftercare is a front-and-center offer, not a hidden add-on.</h2>
               <p>
-                Families can clearly see that EduDash Pro supports aftercare registrations, daily sign-in,
-                homework supervision, secure pickup, and guardian updates. School onboarding and aftercare
-                enquiries now have separate paths.
+                Families can clearly see that EduDash Pro supports aftercare registrations and automated
+                guardian updates. School onboarding and aftercare enquiries now have separate paths.
               </p>
               <div className={styles.aftercareList}>
                 <div className={styles.aftercareListItem}>
@@ -510,10 +524,13 @@ export default function Home() {
 
         {/* ── COMPARISON ── */}
         <section className={styles.sectionAlt}>
-          <div className={`${styles.sectionHeader} ${styles.reveal}`} data-reveal>
+          <div className={`${styles.sectionHeader} ${styles.comparisonHeader} ${styles.reveal}`} data-reveal>
             <span>Why EduDash Pro</span>
             <h2>Built for South African schools from the ground up.</h2>
             <p>Not adapted from a US or European system — designed with CAPS, ZAR, and SA infrastructure in mind.</p>
+            <p className={styles.comparisonSubline}>
+              See exactly where EduDash Pro covers what generic classroom tools and WhatsApp groups can&apos;t.
+            </p>
           </div>
           <div className={`${styles.comparisonTable} ${styles.reveal}`} data-reveal>
             <table>
@@ -529,9 +546,9 @@ export default function Home() {
                 {competitors.map((row) => (
                   <tr key={row.feature}>
                     <td>{row.feature}</td>
-                    <td className={styles.usCol}>{row.us ? <CheckCircle size={16} color="#22c55e" /> : "—"}</td>
-                    <td>{row.gc ? <CheckCircle size={16} color="#6b7280" /> : <span className={styles.compNo}>✗</span>}</td>
-                    <td>{row.wa ? <CheckCircle size={16} color="#6b7280" /> : <span className={styles.compNo}>✗</span>}</td>
+                    <td className={styles.usCol}>{row.us ? <CheckCircle size={20} strokeWidth={2.5} color="#22c55e" /> : "—"}</td>
+                    <td>{row.gc ? <CheckCircle size={18} color="#94a3b8" /> : <span className={styles.compNo}>✗</span>}</td>
+                    <td>{row.wa ? <CheckCircle size={18} color="#94a3b8" /> : <span className={styles.compNo}>✗</span>}</td>
                   </tr>
                 ))}
               </tbody>
@@ -564,22 +581,13 @@ export default function Home() {
               <p className={styles.appNote}>Web app for schools available at <a href="https://app.edudashpro.org.za/sign-in" className={styles.inlineLink}>app.edudashpro.org.za</a></p>
             </div>
             <div className={`${styles.appMockupWrap} ${styles.reveal}`} data-reveal>
-              <div className={styles.phoneMockup}>
-                <div className={styles.phoneMockupInner}>
-                  <div className={styles.phoneMockupHeader}>
-                    <span className={styles.phoneMockupTitle}>Dash AI</span>
-                  </div>
-                  <div className={styles.phoneMockupChat}>
-                    <div className={styles.phoneChatBubble + " " + styles.phoneChatUser}>What is photosynthesis?</div>
-                    <div className={styles.phoneChatBubble + " " + styles.phoneChatDash}>
-                      Great question! 🌱 Photosynthesis is how plants make their own food using sunlight, water, and CO₂. Think of it like the plant&apos;s kitchen...
-                    </div>
-                    <div className={styles.phoneChatBubble + " " + styles.phoneChatUser}>Can you make a diagram?</div>
-                    <div className={styles.phoneChatBubble + " " + styles.phoneChatDash}>Sure! Here&apos;s how it works step by step... 📊</div>
-                  </div>
-                  <div className={styles.phoneMockupInput}>Ask Dash anything...</div>
-                </div>
-              </div>
+              <Image
+                src="/dash-ai-phone-mockup.png"
+                alt="Dash AI answering a learner's homework question, shown on a real phone"
+                width={1245}
+                height={2359}
+                className={styles.phoneMockupPhoto}
+              />
             </div>
           </div>
         </section>
@@ -680,6 +688,7 @@ export default function Home() {
             </div>
             <p className={styles.footerTagline}>Next-gen school operations for Africa and beyond.</p>
             <p className={styles.footerContact}><a href="mailto:hello@edudashpro.org.za">hello@edudashpro.org.za</a></p>
+            <p className={styles.footerContact}><a href={WHATSAPP_URL} target="_blank" rel="noopener">Chat on WhatsApp</a></p>
           </div>
           <div className={styles.footerLinksGroup}>
             <strong>Platform</strong>
@@ -699,7 +708,7 @@ export default function Home() {
             <strong>Support</strong>
             <a href="mailto:support@edudashpro.org.za">Help desk</a>
             <a href="mailto:partners@edudashpro.org.za">Partners</a>
-            <a href="mailto:feedback@edudashpro.org.za">Feedback</a>
+            <Link href="/feedback">Feedback</Link>
           </div>
         </div>
         <div className={styles.footerBottom}>
